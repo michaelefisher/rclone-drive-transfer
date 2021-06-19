@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "rclone.js": "^0.5.0"
+  },
+  "type": "module"
+}
