@@ -32,16 +32,21 @@ if (!commands.includes('sync') && !commands.includes('copy')) {
   process.exit(1);
 }
 
+const logFileName = `rclone-log-${Date.now()}.log`;
+const logLine = "--log-file=" + logFileName 
+
 // TODO: This should all read from the CLI args
 // and take their own flags
 const args = [
-//  "--drive-server-side-across-configs",
-//  "--interactive",
+  "--drive-server-side-across-configs",
   "--dry-run",
   "--verbose",
-  "--gcs-bucket-policy-only",
+//  "--gcs-bucket-policy-only",
   "--fast-list",
-  "--interactive",
+  "--progress",
+  "--log-level DEBUG",
+  logLine,
+//  "--interactive",
 ]
 
 // Command is either () || null
