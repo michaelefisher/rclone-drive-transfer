@@ -1,4 +1,4 @@
-# asceta-files-sync
+# rclone-drive-transfer
 
 This is a thin wrapper around `rclone` that just makes syncs a bit easier to run.
 
