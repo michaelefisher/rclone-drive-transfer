@@ -21,33 +21,38 @@ const dir = process.env.DIR;
 // Remote is in remote:dir format
 // TODO: This is just in Google Drive format
 const command_from = `${from}` + ':' + `${dir}`;
-// TODO: This is just in GCP format
-const command_to = `${to}` + '/' + `${dir}`;
+// TODO: This is just in Google Drive format
+const command_to = `${to}` + ':' + `${dir}`;
 
 // TODO: Set drive-server-side-across-configs automatically
 // if src and dest are drive
 const commands = process.argv.slice(2);
-if (!commands.includes('sync') && !commands.includes('copy')) {
+if (!commands[0].includes('sync') && !commands[0].includes('copy')) {
   console.error('Right now, command must be sync or copy');
   process.exit(1);
 }
 
 const logFileName = `rclone-log-${Date.now()}.log`;
-const logLine = "--log-file=" + logFileName 
+const logLine = "--log-file=" + logFileName
 
-// TODO: This should all read from the CLI args
-// and take their own flags
-const args = [
+// These are default args
+let args = [
   "--drive-server-side-across-configs",
-  "--dry-run",
   "--verbose",
-//  "--gcs-bucket-policy-only",
   "--fast-list",
   "--progress",
-  "--log-level DEBUG",
+  "--log-level=DEBUG",
   logLine,
-//  "--interactive",
 ]
+
+// Optional args include:
+// --gcs-bucket-policy-only, --dry-run
+let extraArgs;
+// If there are additional args
+if (commands.length > 1) {
+  extraArgs = commands.slice(1)
+  args = args.concat(extraArgs);
+}
 
 // Command is either () || null
 let command = null;
