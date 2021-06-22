@@ -16,13 +16,14 @@ const to = process.env.REMOTE_TO;
 
 // This will need to come from a config file,
 // likely in yml or json, but for now, envars it is
-const dir = process.env.DIR;
+const from_dir = process.env.FROM_DIR;
+const to_dir = process.env.TO_DIR;
 
 // Remote is in remote:dir format
 // TODO: This is just in Google Drive format
-const command_from = `${from}` + ':' + `${dir}`;
+const command_from = `${from}` + ':' + `${from_dir}`;
 // TODO: This is just in Google Drive format
-const command_to = `${to}` + ':' + `${dir}`;
+const command_to = `${to}` + ':' + `${to_dir}`;
 
 // TODO: Set drive-server-side-across-configs automatically
 // if src and dest are drive
