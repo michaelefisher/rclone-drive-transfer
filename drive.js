@@ -11,19 +11,20 @@ import rclone from 'rclone.js';
  *
  */
 
-const from = process.env.REMOTE_FROM;
-const to = process.env.REMOTE_TO;
+// remote_from is also used for listing
+const remote_from = process.env.REMOTE_FROM;
+const remote_to = process.env.REMOTE_TO;
 
 // This will need to come from a config file,
 // likely in yml or json, but for now, envars it is
-const from_dir = process.env.FROM_DIR;
-const to_dir = process.env.TO_DIR;
+const from_dir = process.env.DIR_FROM;
+const to_dir = process.env.DIR_TO;
 
 // Remote is in remote:dir format
 // TODO: This is just in Google Drive format
-const command_from = `${from}` + ':' + `${from_dir}`;
+const command_from = `${remote_from}` + ':' + `${from_dir}`;
 // TODO: This is just in Google Drive format
-const command_to = `${to}` + ':' + `${to_dir}`;
+const command_to = `${remote_to}` + ':' + `${to_dir}`;
 
 // TODO: Set drive-server-side-across-configs automatically
 // if src and dest are drive
@@ -39,7 +40,6 @@ let args = [
   "--drive-server-side-across-configs",
   "--fast-list",
   "--progress",
-  "--log-level=DEBUG",
 ]
 
 // Optional args include:

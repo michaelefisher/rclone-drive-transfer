@@ -16,7 +16,8 @@ To exclude files and/or directies, copy `.exclude-from.sample.txt` to `.exclude-
 ```
 $ export REMOTE_FROM=foo_from_drive
 $ export REMOTE_TO=bar_to_drive
-$ export DIR=""
+$ export DIR_FROM=""
+$ export DIR_TO=""
 
 $ ./drive.js copy --log-file=/var/log/rclone/$(date +%s)-log.log --exclude-from=.exclude-from.txt
 ```
