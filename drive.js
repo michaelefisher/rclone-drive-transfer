@@ -27,8 +27,13 @@ const command_to = `${to}` + ':' + `${dir}`;
 // TODO: Set drive-server-side-across-configs automatically
 // if src and dest are drive
 const commands = process.argv.slice(2);
-if (!commands[0].includes('sync') && !commands[0].includes('copy')) {
-  console.error('Right now, command must be sync or copy');
+if (commands &&
+    commands.length > 0 &&
+    !commands[0].includes('sync') && !commands[0].includes('copy') && !commands[0].includes('ls')) {
+  console.error('Right now, command must be ls or sync or copy');
+  process.exit(1);
+} else {
+  console.error('Include a command an optional args');
   process.exit(1);
 }
 
@@ -64,6 +69,12 @@ if (commands[0] == "sync") {
   );
 } else if (commands[0] == "copy") {
   command = rclone.copy(
+    command_from,
+    command_to,
+    ...args
+  );
+} else if (commands[0] == "ls") {
+  command = rclone.ls(
     command_from,
     command_to,
     ...args
