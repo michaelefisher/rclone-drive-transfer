@@ -28,30 +28,21 @@ const command_to = `${to}` + ':' + `${dir}`;
 // if src and dest are drive
 const commands = process.argv.slice(2);
 if (commands &&
-    commands.length > 0 &&
     !commands[0].includes('sync') && !commands[0].includes('copy') && !commands[0].includes('ls')) {
   console.error('Right now, command must be ls or sync or copy');
   process.exit(1);
-} else {
-  console.error('Include a command an optional args');
-  process.exit(1);
 }
-
-const logFileName = `rclone-log-${Date.now()}.log`;
-const logLine = "--log-file=" + logFileName
 
 // These are default args
 let args = [
   "--drive-server-side-across-configs",
-  "--verbose",
   "--fast-list",
   "--progress",
   "--log-level=DEBUG",
-  logLine,
 ]
 
 // Optional args include:
-// --gcs-bucket-policy-only, --dry-run
+// --gcs-bucket-policy-only, --dry-run, --log-file=`file location`
 let extraArgs;
 // If there are additional args
 if (commands.length > 1) {
@@ -76,7 +67,6 @@ if (commands[0] == "sync") {
 } else if (commands[0] == "ls") {
   command = rclone.ls(
     command_from,
-    command_to,
     ...args
   );
 }
