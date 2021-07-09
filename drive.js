@@ -1,5 +1,7 @@
 #! /usr/bin/env node
 
+import fs from 'fs';
+import YAML from 'yaml';
 import rclone from 'rclone.js';
 /* This file uses the system's install rclone to manipulate data
  * in Google Drive
@@ -11,21 +13,6 @@ import rclone from 'rclone.js';
  *
  */
 
-// remote_from is also used for listing
-const remote_from = process.env.REMOTE_FROM;
-const remote_to = process.env.REMOTE_TO;
-
-// This will need to come from a config file,
-// likely in yml or json, but for now, envars it is
-const from_dir = process.env.DIR_FROM;
-const to_dir = process.env.DIR_TO;
-
-// Remote is in remote:dir format
-// TODO: This is just in Google Drive format
-const command_from = `${remote_from}` + ':' + `${from_dir}`;
-// TODO: This is just in Google Drive format
-const command_to = `${remote_to}` + ':' + `${to_dir}`;
-
 // TODO: Set drive-server-side-across-configs automatically
 // if src and dest are drive
 const commands = process.argv.slice(2);
@@ -35,50 +22,109 @@ if (commands &&
   process.exit(1);
 }
 
-// These are default args
-let args = [
-  "--drive-server-side-across-configs",
-  "--fast-list",
-  "--progress",
-]
-
-// Optional args include:
-// --gcs-bucket-policy-only, --dry-run, --log-file=`file location`
-let extraArgs;
-// If there are additional args
-if (commands.length > 1) {
-  extraArgs = commands.slice(1)
-  args = args.concat(extraArgs);
+let configFileName;
+let configFile;
+if (commands[1] != "") {
+  configFileName = commands[1];
+  configFile = fs.readFileSync('./config.yml', 'utf8');
 }
 
-// Command is either () || null
-let command = null;
-if (commands[0] == "sync") {
-  command = rclone.sync(
-    command_from,
-    command_to,
-    ...args
-  );
-} else if (commands[0] == "copy") {
-  command = rclone.copy(
-    command_from,
-    command_to,
-    ...args
-  );
-} else if (commands[0] == "ls") {
-  command = rclone.ls(
-    command_from,
-    ...args
-  );
+// remote_from is also used for listing
+let remote_from = process.env.REMOTE_FROM;
+let remote_to = process.env.REMOTE_TO;
+
+// This will need to come from a config file,
+// likely in yml or json, but for now, envars it is
+let dir_from = process.env.DIR_FROM;
+let dir_to = process.env.DIR_TO;
+
+
+
+
+const runCommand = (cliCommand, commandFrom, commandTo, excludeItems) => {
+  // These are default args
+  let args = [
+    "--log-level=DEBUG",
+    "--drive-export-formats=docx,xlsx,pptx,svg",
+    "--drive-import-formats=docx,xlsx,pptx,svg",
+    "--drive-server-side-across-configs",
+    "--fast-list",
+    `--exclude=${excludeItems.join(" ")}`
+  ]
+
+  let extraArgs;
+  // If there are additional args
+  if (commands.length > 1) {
+    extraArgs = commands.slice(2)
+    args = args.concat(extraArgs);
+  }
+
+  let command;
+  if (cliCommand) {
+    if (cliCommand == "sync") {
+      command = rclone.sync(
+        commandFrom,
+        commandTo,
+        ...args
+      );
+    } else if (cliCommand == "copy") {
+      command = rclone.copy(
+        commandFrom,
+        commandTo,
+        ...args
+      );
+    } else if (cliCommand == "ls") {
+      command = rclone.ls(
+        commandFrom,
+        ...args
+      );
+    }
+    return command;
+  }
 }
 
-if (command) {
-  command.stdout.on("data", (data) => {
-    console.log(data.toString());
-  });
+if (!remote_from || !remote_to || !dir_from || !dir_to ) {
+  const file = YAML.parse(configFile);
+  const jsonString = JSON.stringify(file);
+  const obj = JSON.parse(jsonString);
+  const list = obj.mapping;
+  for (let item in list) {
+    const source = list[item];
+    for (let row in source) {
+      const from = source[row].from;
+      const to = source[row].to;
 
-  command.stderr.on("data", (data) => {
-    console.error(data.toString());
-  });
+      remote_from = from[0];
+      dir_from = from[1];
+
+      remote_to = to[0];
+      dir_to = to[1];
+
+      let excludeItems;
+      if (source[row].exclude) {
+        excludeItems = source[row].exclude;
+      } else {
+        excludeItems = [];
+      }
+
+      const cliCommand = commands[0];
+
+      if (cliCommand) {
+        const command = runCommand(cliCommand,
+                                  `${remote_from}` + ':' + `${dir_from}`,
+                                  `${remote_to}` + ':' + `${dir_to}`,
+                                  excludeItems
+                                  );
+
+        command.stdout.on("data", (data) => {
+          console.log(data.toString());
+        });
+
+        command.stderr.on("data", (data) => {
+          console.error(data.toString());
+        });
+      }
+    }
+  }
 }
 

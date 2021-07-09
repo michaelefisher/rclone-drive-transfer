@@ -1,2 +1,0 @@
-# Sample exclude file
-*test/**

@@ -1,6 +1,7 @@
 {
   "dependencies": {
-    "rclone.js": "^0.5.0"
+    "rclone.js": "^0.5.0",
+    "yaml": "^1.10.2"
   },
   "type": "module"
 }
