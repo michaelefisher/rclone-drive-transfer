@@ -17,8 +17,12 @@ import rclone from 'rclone.js';
 // if src and dest are drive
 const commands = process.argv.slice(2);
 if (commands &&
-    !commands[0].includes('sync') && !commands[0].includes('copy') && !commands[0].includes('ls')) {
-  console.error('Right now, command must be ls or sync or copy');
+    !commands[0].includes('sync')
+    && !commands[0].includes('copy')
+    && !commands[0].includes('ls')
+    && !commands[0].includes('check')
+  ) {
+  console.error('Right now, command must be ls or sync or copy or check.');
   process.exit(1);
 }
 
@@ -77,6 +81,12 @@ const runCommand = (cliCommand, commandFrom, commandTo, excludeItems) => {
       command = rclone.ls(
         commandFrom,
         ...args
+      );
+    } else if (cliCommand == "check") {
+      command = rclone.check(
+        commandFrom,
+        commandTo,
+        '--one-way'
       );
     }
     return command;
