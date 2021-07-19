@@ -6,3 +6,7 @@ npm-debug.log
 
 # exclude logs
 **/**.log
+logs/**
+
+# exclude-from
+.exclude-from.txt

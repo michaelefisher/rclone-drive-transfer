@@ -1,0 +1,23 @@
+---
+mapping:
+  - case_studies:
+      from:
+        - sophia_asceta_co_gtempaccount_com
+        - "ASCETA CASE STUDIES"        
+      to:
+        - michael_fisher_asceta_co_communications
+        - "" 
+  - work_process:
+      from:
+        - sophia_asceta_co_gtempaccount_com
+        - "ASCETA WORK PROCESSES/Prior Versions - 2019" 
+      to:
+        - michael_fisher_asceta_co_client_projects
+        - "Client Projects/00 PM Processes" 
+  - conferences:
+      from:
+        - sophia_asceta_co_gtempaccount_com
+        - "CONFERENCES"       
+      to:
+        - michael_fisher_asceta_co_communications
+        - "Conferences+Presentations" 
