@@ -30,20 +30,19 @@ let configFileName;
 let configFile;
 if (commands[1] != "") {
   configFileName = commands[1];
-  configFile = fs.readFileSync('./config.yml', 'utf8');
+} else {
+  configFileName = fs.readFileSync('./config.yml', 'utf8');
 }
+
 
 // remote_from is also used for listing
 let remote_from = process.env.REMOTE_FROM;
-let remote_to = process.env.REMOTE_TO;
+let remote_to = process.env.eEMOTE_TO;
 
 // This will need to come from a config file,
 // likely in yml or json, but for now, envars it is
 let dir_from = process.env.DIR_FROM;
 let dir_to = process.env.DIR_TO;
-
-
-
 
 const runCommand = (cliCommand, commandFrom, commandTo, excludeItems) => {
   // These are default args
@@ -53,7 +52,8 @@ const runCommand = (cliCommand, commandFrom, commandTo, excludeItems) => {
     "--drive-import-formats=docx,xlsx,pptx,svg",
     "--drive-server-side-across-configs",
     "--fast-list",
-    `--exclude=${excludeItems.join(" ")}`
+    `--exclude=${excludeItems.join(" ")}`,
+    "--dry-run",
   ]
 
   let extraArgs;
@@ -94,7 +94,7 @@ const runCommand = (cliCommand, commandFrom, commandTo, excludeItems) => {
 }
 
 if (!remote_from || !remote_to || !dir_from || !dir_to ) {
-  const file = YAML.parse(configFile);
+  const file = YAML.parse(configFileName);
   const jsonString = JSON.stringify(file);
   const obj = JSON.parse(jsonString);
   const list = obj.mapping;
