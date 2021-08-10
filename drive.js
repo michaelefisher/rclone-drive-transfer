@@ -35,15 +35,6 @@ if (commands[1] != "") {
 }
 
 
-// remote_from is also used for listing
-let remote_from = process.env.REMOTE_FROM;
-let remote_to = process.env.eEMOTE_TO;
-
-// This will need to come from a config file,
-// likely in yml or json, but for now, envars it is
-let dir_from = process.env.DIR_FROM;
-let dir_to = process.env.DIR_TO;
-
 const runCommand = (cliCommand, commandFrom, commandTo, excludeItems) => {
   // These are default args
   let args = [
