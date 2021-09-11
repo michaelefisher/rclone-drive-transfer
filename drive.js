@@ -15,14 +15,17 @@ import rclone from 'rclone.js';
 
 // TODO: Set drive-server-side-across-configs automatically
 // if src and dest are drive
+
+const help = "Usage:\n\n./drive.js command configFile [...args]\n\n";
+
 const commands = process.argv.slice(2);
-if (commands &&
-    !commands[0].includes('sync')
+if (commands.length > 0
+    && !commands[0].includes('sync')
     && !commands[0].includes('copy')
     && !commands[0].includes('ls')
     && !commands[0].includes('check')
   ) {
-  console.error('Right now, command must be ls or sync or copy or check.');
+  console.error("Right now, command must be ls or sync or copy or check.\n\n" + help);
   process.exit(1);
 }
 
@@ -31,8 +34,8 @@ let configFile;
 if (commands[1] && commands[1] != "") {
   configFileName = fs.readFileSync(commands[1], 'utf-8');
 } else {
-  console.log("No config file given.");
-  exit(1);
+  console.log("No config file given. Please supply as second argument.\n\n" + help);
+  process.exit(1);
 }
 
 let fromBackend;
