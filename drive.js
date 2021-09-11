@@ -28,23 +28,23 @@ if (commands &&
 
 let configFileName;
 let configFile;
-if (commands[1] != "") {
+if (commands[1] && commands[1] != "") {
   configFileName = commands[1];
 } else {
-  configFileName = fs.readFileSync('./config.yml', 'utf8');
+  configFileName = fs.readFileSync('./config-google-storage.yml', 'utf8');
 }
 
-
+let remote_from;
+let remote_to;
+let dir_from;
+let dir_to;
 const runCommand = (cliCommand, commandFrom, commandTo, excludeItems) => {
   // These are default args
   let args = [
     "--log-level=DEBUG",
     "--drive-export-formats=docx,xlsx,pptx,svg",
-    "--drive-import-formats=docx,xlsx,pptx,svg",
-    "--drive-server-side-across-configs",
-    "--fast-list",
     `--exclude=${excludeItems.join(" ")}`,
-    "--dry-run",
+    "--gcs-bucket-policy-only"
   ]
 
   let extraArgs;
@@ -84,47 +84,45 @@ const runCommand = (cliCommand, commandFrom, commandTo, excludeItems) => {
   }
 }
 
-if (!remote_from || !remote_to || !dir_from || !dir_to ) {
-  const file = YAML.parse(configFileName);
-  const jsonString = JSON.stringify(file);
-  const obj = JSON.parse(jsonString);
-  const list = obj.mapping;
-  for (let item in list) {
-    const source = list[item];
-    for (let row in source) {
-      const from = source[row].from;
-      const to = source[row].to;
+const file = YAML.parse(configFileName);
+const jsonString = JSON.stringify(file);
+const obj = JSON.parse(jsonString);
+const list = obj.mapping;
+for (let item in list) {
+  const source = list[item];
+  for (let row in source) {
+    const from = source[row].from;
+    const to = source[row].to;
 
-      remote_from = from[0];
-      dir_from = from[1];
+    remote_from = from[0];
+    dir_from = from[1];
 
-      remote_to = to[0];
-      dir_to = to[1];
+    remote_to = to[0];
+    dir_to = to[1];
 
-      let excludeItems;
-      if (source[row].exclude) {
-        excludeItems = source[row].exclude;
-      } else {
-        excludeItems = [];
-      }
+    let excludeItems;
+    if (source[row].exclude) {
+      excludeItems = source[row].exclude;
+    } else {
+      excludeItems = [];
+    }
 
-      const cliCommand = commands[0];
+    const cliCommand = commands[0];
 
-      if (cliCommand) {
-        const command = runCommand(cliCommand,
-                                  `${remote_from}` + ':' + `${dir_from}`,
-                                  `${remote_to}` + ':' + `${dir_to}`,
-                                  excludeItems
-                                  );
+    if (cliCommand) {
+      const command = runCommand(cliCommand,
+                                `${remote_from}` + ':' + `${dir_from}`,
+                                `${remote_to}` + ':' + `${dir_to}`,
+                                excludeItems
+                                );
 
-        command.stdout.on("data", (data) => {
-          console.log(data.toString());
-        });
+      command.stdout.on("data", (data) => {
+        console.log(data.toString());
+      });
 
-        command.stderr.on("data", (data) => {
-          console.error(data.toString());
-        });
-      }
+      command.stderr.on("data", (data) => {
+        console.error(data.toString());
+      });
     }
   }
 }
