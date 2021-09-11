@@ -29,22 +29,24 @@ if (commands &&
 let configFileName;
 let configFile;
 if (commands[1] && commands[1] != "") {
-  configFileName = commands[1];
+  configFileName = fs.readFileSync(commands[1], 'utf-8');
 } else {
-  configFileName = fs.readFileSync('./config-google-storage.yml', 'utf8');
+  console.log("No config file given.");
+  exit(1);
 }
 
-let remote_from;
-let remote_to;
-let dir_from;
-let dir_to;
+let fromBackend;
+let fromPath;
+let toBackend;
+let toPath;
+
+let excludeItems;
 const runCommand = (cliCommand, commandFrom, commandTo, excludeItems) => {
   // These are default args
   let args = [
     "--log-level=DEBUG",
-    "--drive-export-formats=docx,xlsx,pptx,svg",
-    `--exclude=${excludeItems.join(" ")}`,
-    "--gcs-bucket-policy-only"
+   `--exclude=${excludeItems.join(" ")}`,
+    "--dry-run"
   ]
 
   let extraArgs;
@@ -85,45 +87,34 @@ const runCommand = (cliCommand, commandFrom, commandTo, excludeItems) => {
 }
 
 const file = YAML.parse(configFileName);
-const jsonString = JSON.stringify(file);
-const obj = JSON.parse(jsonString);
-const list = obj.mapping;
+const list = file.mapping;
 for (let item in list) {
-  const source = list[item];
-  for (let row in source) {
-    const from = source[row].from;
-    const to = source[row].to;
+  const values = list[item];
 
-    remote_from = from[0];
-    dir_from = from[1];
+  fromBackend = values.from_backend;
+  fromPath = values.from_path;
+  toBackend = values.to_backend;
+  toPath = values.to_path;
 
-    remote_to = to[0];
-    dir_to = to[1];
+  const excludeList = values.exclude;
+  excludeItems = (excludeList) ? excludeList : [];
 
-    let excludeItems;
-    if (source[row].exclude) {
-      excludeItems = source[row].exclude;
-    } else {
-      excludeItems = [];
-    }
+  const cliCommand = commands[0];
 
-    const cliCommand = commands[0];
+  if (cliCommand) {
+    const command = runCommand(cliCommand,
+                              `${fromBackend}` + ':' + `${fromPath}`,
+                              `${toBackend}` + ':' + `${toPath}`,
+                              excludeItems
+                              );
 
-    if (cliCommand) {
-      const command = runCommand(cliCommand,
-                                `${remote_from}` + ':' + `${dir_from}`,
-                                `${remote_to}` + ':' + `${dir_to}`,
-                                excludeItems
-                                );
+    command.stdout.on("data", (data) => {
+      console.log(data.toString());
+    });
 
-      command.stdout.on("data", (data) => {
-        console.log(data.toString());
-      });
-
-      command.stderr.on("data", (data) => {
-        console.error(data.toString());
-      });
-    }
+    command.stderr.on("data", (data) => {
+      console.error(data.toString());
+    });
   }
 }
 

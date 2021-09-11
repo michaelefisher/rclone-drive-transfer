@@ -1,12 +1,15 @@
 *node_modules*
 npm-debug.log
 
-# config file 
+# config file
 .config.yml
 
 # exclude logs
 **/**.log
 logs/**
+
+# system files
+**/**/.DS_Store
 
 # exclude-from
 .exclude-from.txt
