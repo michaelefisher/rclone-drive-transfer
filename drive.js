@@ -51,10 +51,12 @@ const runCommand = (cliCommand, commandFrom, commandTo, excludeItems) => {
   }
   // These are default args
   let args = [
-    modifiedExcludeList.join(" "),
     "--log-level=DEBUG",
     "--dry-run"
   ]
+  args = (modifiedExcludeList && modifiedExcludeList.length > 0) ?
+    args.concat(modifiedExcludeList.join(" "))
+  : args
 
   let extraArgs;
   // If there are additional args

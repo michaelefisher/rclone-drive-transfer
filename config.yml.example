@@ -13,6 +13,3 @@ mapping:
     to_backend: google_drive_rdrive_config_to
     to_path: communications
     exclude:
-      - "Foo/**"
-      - "Bar/**"
-
