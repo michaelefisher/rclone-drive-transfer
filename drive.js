@@ -45,10 +45,14 @@ let toPath;
 
 let excludeItems;
 const runCommand = (cliCommand, commandFrom, commandTo, excludeItems) => {
+  let modifiedExcludeList = [];
+  if (excludeItems && excludeItems.length > 0) {
+    excludeItems.forEach(item => modifiedExcludeList.push(`--exclude=${item}`));
+  }
   // These are default args
   let args = [
+    modifiedExcludeList.join(" "),
     "--log-level=DEBUG",
-   `--exclude=${excludeItems.join(" ")}`,
     "--dry-run"
   ]
 
