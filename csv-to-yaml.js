@@ -36,7 +36,6 @@ csvtoyaml(inputFile)
         'noArrayIndent':true,
         'quotingType': "\"",
         'condenseFlow': true,
-
       }), (error) => {
         if (error) {
           console.error(error);
