@@ -1,5 +1,7 @@
 {
   "dependencies": {
+    "csvtoyaml": "^1.0.6",
+    "js-yaml": "^4.1.0",
     "rclone.js": "^0.5.0",
     "yaml": "^1.10.2"
   },

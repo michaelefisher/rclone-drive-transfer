@@ -1,0 +1,93 @@
+mapping:
+- from_backend: dropbox
+  from_path: asceta finance
+  to_backend: "#ERROR!"
+  to_path: "#VALUE!"
+  exclude:
+  - asceta finance/2019 ASCETA FINANCE
+  - |-
+
+    asceta finance/2020 ASCETA FINANCE
+  - |-
+
+    asceta finance/2021 ASCETA FINANCE
+- from_backend: dropbox
+  from_path: asceta legals and compliance
+  to_backend: ""
+  to_path: "#VALUE!"
+  exclude: ""
+- from_backend: dropbox
+  from_path: asceta legals and compliance/Client Contracts
+  to_backend: ""
+  to_path: Client Contracts
+  exclude: ""
+- from_backend: dropbox
+  from_path: asceta library
+  to_backend: Thought Leadership + Learning
+  to_path: Library
+  exclude: ""
+- from_backend: dropbox
+  from_path: asceta library/Board Development
+  to_backend: Thought Leadership + Learning
+  to_path: Library/Culture and Equity Transformation
+  exclude: ""
+- from_backend: dropbox
+  from_path: asceta library/Case Studies
+  to_backend: Thought Leadership + Learning
+  to_path: Library/TBD
+  exclude: ""
+- from_backend: dropbox
+  from_path: asceta library/Equity
+  to_backend: Thought Leadership + Learning
+  to_path: Library/Culture and Equity Transformation
+  exclude: ""
+- from_backend: dropbox
+  from_path: asceta library/Facilitation
+  to_backend: Thought Leadership + Learning
+  to_path: Library/Facilitation
+  exclude: ""
+- from_backend: dropbox
+  from_path: asceta library/GAIA
+  to_backend: Remove or Archive
+  to_path: Docs from Dropbox
+  exclude: ""
+- from_backend: dropbox
+  from_path: asceta library/Law
+  to_backend: Thought Leadership + Learning
+  to_path: Library/TBD
+  exclude: ""
+- from_backend: dropbox
+  from_path: asceta library/Library - Adult Learning
+  to_backend: Thought Leadership + Learning
+  to_path: Library/TBD
+  exclude: ""
+- from_backend: dropbox
+  from_path: asceta library/Library - Brand
+  to_backend: Thought Leadership + Learning
+  to_path: Library/TBD
+  exclude: ""
+- from_backend: dropbox
+  from_path: asceta library/Library - Design
+  to_backend: Thought Leadership + Learning
+  to_path: Library/Strategic Design
+  exclude: ""
+- from_backend: dropbox
+  from_path: asceta library/Library - Discovery
+  to_backend: Thought Leadership + Learning
+  to_path: Library/Listening and Insights
+  exclude: ""
+- from_backend: dropbox
+  from_path: asceta library/Library - Equity
+  to_backend: Thought Leadership + Learning
+  to_path: Library/Culture and Equity Transformation
+  exclude: ""
+- from_backend: dropbox
+  from_path: asceta library/Library - Management
+  to_backend: Thought Leadership + Learning
+  to_path: Library/Culture and Equity Transformation
+  exclude: ""
+- from_backend: dropbox
+  from_path: asceta library/Library - Organizational Development
+  to_backend: Thought Leadership + Learning
+  to_path: Library/Culture and Equity Transformation
+  exclude: ""

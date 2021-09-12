@@ -1,14 +1,14 @@
 ---
 # Currently supports 'from_*', 'to_*', and 'exclude'
 mapping:
-  - from_backend: google_drive_rdrive_config_from
+  -	from_backend: google_drive_rdrive_config_from
     from_path: communications_old
     to_backend: google_drive_rdrive_config_to
     to_path: communications
     exclude:
       - "Foo/**"
       - "Bar/**"
-  - from_backend: google_drive_rdrive_config_from2
+  -	from_backend: google_drive_rdrive_config_from2
     from_path: communications_old
     to_backend: google_drive_rdrive_config_to
     to_path: communications

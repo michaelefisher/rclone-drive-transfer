@@ -16,7 +16,7 @@ import rclone from 'rclone.js';
 // TODO: Set drive-server-side-across-configs automatically
 // if src and dest are drive
 
-const help = "Usage:\n\n./drive.js command configFile [...args]\n\n";
+const help = "Usage:\n\n./drive.js command configFile [...options]\n\n";
 
 const commands = process.argv.slice(2);
 if (commands.length > 0
